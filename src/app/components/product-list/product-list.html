@@ -1,0 +1,36 @@
+<div class="list-container">
+
+  <div class="filters">
+    <input type="text" [(ngModel)]="searchText" (input)="filterProducts()" placeholder="🔍 Search by name or category...">
+
+    <div class="filter-group">
+      <label [class.active]="inStockOnly">
+        <input type="checkbox" [(ngModel)]="inStockOnly" (change)="filterProducts()">
+        <span>In Stock Only</span>
+      </label>
+
+      <label [class.active]="onSaleOnly">
+        <input type="checkbox" [(ngModel)]="onSaleOnly" (change)="filterProducts()">
+        <span>On Sale Only</span>
+      </label>
+    </div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card"
+         *ngFor="let product of filteredProducts"
+         (click)="selectProduct(product)"
+         [appOnSaleHighlight]="product.onSale">
+
+      <h3>{{product.name}}</h3>
+      <p>{{product.category}}</p>
+      <p class="price">₹{{product.price}}</p>
+
+      <span class="status" [class.out]="!product.inStock">
+        {{product.inStock ? 'In Stock' : 'Out of Stock'}}
+      </span>
+
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,16 @@
+<div class="detail" *ngIf="product">
+  <h2>{{product.name}}</h2>
+  <p>{{product.description}}</p>
+
+  <div class="info">
+    <span><strong>Category:</strong> {{product.category}}</span>
+    <span><strong>Price:</strong> ₹{{product.price}}</span>
+    <span><strong>Status:</strong>
+      {{product.inStock ? 'In Stock' : 'Out of Stock'}}
+      <span *ngIf="product.onSale" class="sale-note">(On Sale)</span>
+    </span>
+  </div>
+
+  <button (click)="goBack()">Back</button>
+  <button [routerLink]="['/edit', product.id]">Edit</button>
+</div>

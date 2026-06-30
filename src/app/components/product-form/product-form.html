@@ -1,0 +1,109 @@
+<div class="form-container">
+  <h2>{{ isEdit ? 'Edit' : 'Add' }} Product</h2>
+
+  <!-- toggle switch -->
+  <div class="form-toggle">
+    <span [class.active]="!useReactive">Template-driven</span>
+    <div class="toggle-switch" (click)="useReactive = !useReactive">
+      <div class="toggle-track" [class.toggled]="useReactive">
+        <div class="toggle-thumb"></div>
+      </div>
+    </div>
+    <span [class.active]="useReactive">Reactive</span>
+  </div>
+
+  <p class="form-hint" *ngIf="!useReactive">
+    Basic editing &mdash; name, price &amp; sale status
+  </p>
+  <p class="form-hint" *ngIf="useReactive">
+    Advanced editing &mdash; full validation, category &amp; stock controls
+  </p>
+
+  <!-- ───────── reactive form (advanced) ───────── -->
+  <form *ngIf="useReactive" class="form" [formGroup]="productForm" (ngSubmit)="onReactiveSubmit()">
+    <div class="field">
+      <label for="rf-name">Name</label>
+      <input id="rf-name" formControlName="name" placeholder="Product name" />
+      <div *ngIf="productForm.get('name')!.invalid && productForm.get('name')!.touched" class="error">
+        Name is required.
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="rf-price">Price (₹)</label>
+      <input id="rf-price" formControlName="price" type="number" placeholder="0.00" />
+      <div *ngIf="productForm.get('price')!.invalid && productForm.get('price')!.touched" class="error">
+        Price must be a positive number.
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="rf-category">Category</label>
+      <input id="rf-category" formControlName="category" placeholder="e.g. Electronics" />
+      <div *ngIf="productForm.get('category')!.invalid && productForm.get('category')!.touched" class="error">
+        Category is required.
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="rf-desc">Description</label>
+      <textarea id="rf-desc" formControlName="description" placeholder="Product description"></textarea>
+    </div>
+
+    <div class="checkbox-row">
+      <label class="checkbox-label">
+        <input type="checkbox" formControlName="inStock" />
+        <span class="checkmark"></span>
+        In Stock
+      </label>
+
+      <label class="checkbox-label">
+        <input type="checkbox" formControlName="onSale" />
+        <span class="checkmark"></span>
+        On Sale
+      </label>
+    </div>
+
+    <button type="submit" class="btn-submit" [disabled]="productForm.invalid">
+      {{ isEdit ? 'Update' : 'Add' }} Product
+    </button>
+  </form>
+
+  <!-- ───────── template-driven form (basic) ───────── -->
+  <form *ngIf="!useReactive" #templateForm="ngForm" class="form" (ngSubmit)="onTemplateSubmit(templateForm)">
+    <div class="field">
+      <label for="tf-name">Name</label>
+      <input id="tf-name" name="name" [(ngModel)]="product.name" required placeholder="Product name" />
+      <div *ngIf="templateForm.controls['name']?.invalid && templateForm.controls['name']?.touched" class="error">
+        Name is required.
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="tf-price">Price (₹)</label>
+      <input id="tf-price" name="price" [(ngModel)]="product.price" type="number" required min="0.01"
+        placeholder="0.00" />
+      <div *ngIf="templateForm.controls['price']?.invalid && templateForm.controls['price']?.touched" class="error">
+        Price must be a positive number.
+      </div>
+    </div>
+
+    <div class="checkbox-row">
+      <label class="checkbox-label">
+        <input type="checkbox" name="onSale" [(ngModel)]="product.onSale" />
+        <span class="checkmark"></span>
+        On Sale
+      </label>
+    </div>
+
+    <button type="submit" class="btn-submit" [disabled]="templateForm.invalid">
+      {{ isEdit ? 'Update' : 'Add' }} Product
+    </button>
+  </form>
+
+  <button class="btn-back" routerLink="/">← Back to list</button>
+</div>
+
+<div class="toast" *ngIf="message">
+  {{ message }}
+</div>
