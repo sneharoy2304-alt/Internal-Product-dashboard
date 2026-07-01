@@ -40,8 +40,7 @@ app-root {
   background: #2a9d8f;
   border-radius: 4px;
 
-}
-
   &:hover {
     background: #1b7a7a;
   }
+}
